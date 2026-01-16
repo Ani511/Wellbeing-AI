@@ -16,7 +16,7 @@ This project aims to build an AI-powered tool that uses publicly available healt
 - Support **population-level policy decisions** through BI dashboards
 
 ---
-## ##🔬 Research Intention
+## 🔬 Research Intention
 
 Most predictive health models prioritize raw accuracy over probabilistic reliability. In high-stakes settings like preventive healthcare, an uncalibrated model can provide "confidently wrong" predictions. This project focuses on bridging the gap between high-performance gradient boosting and interpretable, well-calibrated risk estimation.
 
