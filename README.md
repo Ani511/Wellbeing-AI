@@ -4,7 +4,6 @@
 > 📅 Project Date: May 2025 &nbsp;&nbsp;&nbsp;&nbsp;🔗 [Kaggle Dataset](https://www.kaggle.com/datasets/cdc/behavioral-risk-factor-surveillance-system)
 
 ---
-
 ## 🩺 Problem Statement
 
 Preventive healthcare in underserved and vulnerable populations is often hindered by the lack of explainable risk assessments based on **Social Determinants of Health (SDOH)**. Traditional models ignore non-clinical data such as mental health, socioeconomic status, lifestyle, or access to care.
@@ -17,16 +16,33 @@ This project aims to build an AI-powered tool that uses publicly available healt
 - Support **population-level policy decisions** through BI dashboards
 
 ---
+## ##🔬 Research Intention
 
-## 🌍 Real-World Impact
-
-- 🎯 **Personalized Prevention**: Deliver risk scores to individuals before clinical symptoms appear
-- 👥 **Equity-Oriented**: Account for social determinants often overlooked in traditional models
-- 🏥 **Supports Public Health Agencies**: Visualize clusters of at-risk populations to guide interventions
-- 🤖 **Human-Centered AI**: Transparent, interpretable models reduce “black-box” distrust
+Most predictive health models prioritize raw accuracy over probabilistic reliability. In high-stakes settings like preventive healthcare, an uncalibrated model can provide "confidently wrong" predictions. This project focuses on bridging the gap between high-performance gradient boosting and interpretable, well-calibrated risk estimation.
 
 ---
 
+## 🚀 Key Research Contributions
+
+### 1. Model Calibration & Uncertainty Estimation
+Standard XGBoost models often output distorted probabilities (sigmoidal curves). I implemented a **calibration layer** to ensure that predicted risk scores map accurately to real-world frequencies.
+* **Method:** Utilized `CalibratedClassifierCV` (Sigmoid/Platt Scaling and Isotonic Regression).
+* **Metrics:** Evaluated model performance using **Brier Score** and **Log-Loss** to assess the quality of predicted probabilities beyond simple Accuracy/F1.
+* **Validation:** Generated **Reliability Diagrams** to visualize the alignment between predicted probability and empirical frequency.
+
+
+
+### 2. Explainable AI (XAI) for Safety-Critical Systems
+To ensure model decisions are grounded in Social Determinants of Health (SDOH) rather than noise, I integrated post-hoc interpretability tools:
+* **Local Explanations:** Used **LIME** to generate per-individual risk breakdowns, essential for clinician-patient trust.
+* **Global Insights:** Used **ELI5 (Permutation Importance)** to verify that the model’s "logic" aligns with established medical literature (e.g., the high impact of BMI and physical activity on chronic disease).
+
+
+
+### 3. Handling Extreme Class Imbalance & SDOH
+The CDC BRFSS dataset is highly skewed. I addressed this using a combination of **Stratified Sampling** and **Scale_Pos_Weight** in XGBoost to ensure the model maintains sensitivity for minority "At Risk" classes while maintaining calibration.
+
+---
 ## 📚 Dataset
 
 - 📦 **Source**: [CDC Behavioral Risk Factor Surveillance System (BRFSS)](https://www.kaggle.com/datasets/cdc/behavioral-risk-factor-surveillance-system)
@@ -55,6 +71,9 @@ We built an end-to-end ML system using BRFSS data to predict chronic disease ris
 - Delivered **interpretable explanations per individual** using LIME & ELI5
 - Built a working prototype of a **Streamlit app** for personal health feedback
 - Designed **Power BI dashboards** to visualize risk across different regions and demographics
+- * **Calibration Impact:** Post-hoc calibration significantly improved the **Brier Score**, enhancing the reliability of the 0-1 risk scale for clinical decision support.
+* **SDOH Clustering:** Power BI analysis revealed that lower-income brackets correlated strongly with high "model-predicted risk," validating the model's ability to pick up on socioeconomic stressors.
+* **Explainability:** LIME confirmed that "Mental Health" and "Access to Care" were top risk drivers for certain demographics, highlighting key areas for preventive intervention.
 
 ---
 
@@ -77,15 +96,15 @@ We built an end-to-end ML system using BRFSS data to predict chronic disease ris
 
 ---
 
-## 🧠 Technical Stack
+## 🛠️ Technical Stack & Methodology
 
-| Area                  | Tools Used                                             |
-|-----------------------|--------------------------------------------------------|
-| **ML & Modeling**     | `XGBoost`, `Scikit-learn`, `CalibratedClassifierCV`   |
-| **Explainability**    | `ELI5`, `LIME`, `SHAP (optional)`                      |
-| **Frontend**          | `Streamlit`                                           |
-| **Visualization & BI**| `Power BI`, `Seaborn`, `Plotly`                        |
-| **Data**              | BRFSS (CDC) 2020–2022 – ~400K records, 300+ features  |
+| Component | Tool | **Research Application** |
+| :--- | :--- | :--- |
+| **Modeling** | XGBoost, Scikit-learn | Calibrated Gradient Boosting for non-linear risk estimation. |
+| **Calibration** | `CalibratedClassifierCV` | Implementation of Isotonic & Sigmoid scaling for probability refinement. |
+| **Interpretability** | LIME, ELI5 | Feature attribution and local surrogate modeling. |
+| **Data Engine** | Python, Polars | Handling 400k+ records with efficient, vectorized pre-processing. |
+| **Deployment** | Streamlit, Power BI | Translating mathematical scores into empathetic user-facing interfaces. |
 
 ---
 
