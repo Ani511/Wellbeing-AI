@@ -18,29 +18,26 @@ This project aims to build an AI-powered tool that uses publicly available healt
 ---
 ## 🔬 Research Intention
 
-Most predictive health models prioritize raw accuracy over probabilistic reliability. In high-stakes settings like preventive healthcare, an uncalibrated model can provide "confidently wrong" predictions. This project focuses on bridging the gap between high-performance gradient boosting and interpretable, well-calibrated risk estimation.
-
+Many health risk models emphasize discrimination metrics (e.g., accuracy or AUC) without sufficient attention to probabilistic calibration and ranking efficiency, which are critical in preventive and population-level decision-making
 ---
 
 ## 🚀 Key Research Contributions
 
 ### 1. Model Calibration & Uncertainty Estimation
-Standard XGBoost models often output distorted probabilities (sigmoidal curves). I implemented a **calibration layer** to ensure that predicted risk scores map accurately to real-world frequencies.
-* **Method:** Utilized `CalibratedClassifierCV` (Sigmoid/Platt Scaling and Isotonic Regression).
-* **Metrics:** Evaluated model performance using **Brier Score** and **Log-Loss** to assess the quality of predicted probabilities beyond simple Accuracy/F1.
-* **Validation:** Generated **Reliability Diagrams** to visualize the alignment between predicted probability and empirical frequency.
-
-
+A calibrated XGBoost classifier was trained using a leakage-safe SDOH feature set. Model evaluation emphasized probabilistic reliability and ranking performance rather than accuracy alone.
+* Metrics: ROC-AUC (~0.72), Brier Score, Expected Calibration Error (ECE ≈ 1%)
+* Validation: Reliability diagrams and decile-based risk validation
+Results show that predicted probabilities align closely with observed outcome frequencies, supporting use in population-level risk stratification rather than individual diagnosis.
 
 ### 2. Explainable AI (XAI) for Safety-Critical Systems
 To ensure model decisions are grounded in Social Determinants of Health (SDOH) rather than noise, I integrated post-hoc interpretability tools:
 * **Local Explanations:** Used **LIME** to generate per-individual risk breakdowns, essential for clinician-patient trust.
-* **Global Insights:** Used **ELI5 (Permutation Importance)** to verify that the model’s "logic" aligns with established medical literature (e.g., the high impact of BMI and physical activity on chronic disease).
+* **Global Insights:** Used **ELI5 (Permutation Importance)** to verify that the model’s "logic" aligns with established medical literature (e.g., the high impact of high impact of self-reported general health, education, age, employment, and income).
 
 
 
 ### 3. Handling Extreme Class Imbalance & SDOH
-The CDC BRFSS dataset is highly skewed. I addressed this using a combination of **Stratified Sampling** and **Scale_Pos_Weight** in XGBoost to ensure the model maintains sensitivity for minority "At Risk" classes while maintaining calibration.
+Class balance was addressed through stratified sampling, threshold-free evaluation (AUC), and ranking-based metrics, avoiding aggressive reweighting that could distort calibration.
 
 ---
 ## 📚 Dataset
@@ -66,14 +63,12 @@ We built an end-to-end ML system using BRFSS data to predict chronic disease ris
 
 ## ✅ Results
 
-- Achieved **balanced accuracy >80%** on chronic disease prediction using calibrated XGBoost
-- Successfully identified and visualized **key social determinants** contributing to risk (e.g., exercise, depression, income, healthcare access)
-- Delivered **interpretable explanations per individual** using LIME & ELI5
-- Built a working prototype of a **Streamlit app** for personal health feedback
-- Designed **Power BI dashboards** to visualize risk across different regions and demographics
-- * **Calibration Impact:** Post-hoc calibration significantly improved the **Brier Score**, enhancing the reliability of the 0-1 risk scale for clinical decision support.
-* **SDOH Clustering:** Power BI analysis revealed that lower-income brackets correlated strongly with high "model-predicted risk," validating the model's ability to pick up on socioeconomic stressors.
-* **Explainability:** LIME confirmed that "Mental Health" and "Access to Care" were top risk drivers for certain demographics, highlighting key areas for preventive intervention.
+- Achieved ROC-AUC ≈ 0.72 using SDOH-only features in a leakage-safe setting
+- Demonstrated strong risk ranking efficiency, capturing: ~82% of true high-risk individuals within the top 5% predicted risk and ~79% within the top 10%
+- Validated a 0–100 Health Risk Score with monotonic alignment between score deciles and observed risk
+- Achieved low Expected Calibration Error (~1%), indicating reliable probabilistic estimates
+- Observed stable performance across sex and income subgroups
+- Generated interpretable global (ELI5) and local (LIME) explanations consistent with public health literature
 
 ---
 
@@ -82,7 +77,7 @@ We built an end-to-end ML system using BRFSS data to predict chronic disease ris
 - 🔍 **Risk Prediction**: Binary classification for chronic disease presence using XGBoost
 - ⚖️ **Class Imbalance Handling**: Resampling and calibration to account for underrepresented outcomes
 - 💬 **Explainability Layer**: LIME & ELI5 breakdown of prediction factors
-- 🤖 **LLM Recommender**: Natural language health tips based on risk and feature influence
+- 🤖 **LLM-based Recommendation Prototype (Exploratory)** : A downstream language model consumes model outputs and explanation features to generate non-clinical, supportive health guidance. These recommendations are illustrative and not intended for medical diagnosis or treatment.
 - 📊 **Power BI Dashboards**: Public health-level visual insights on SDOH clustering
 - 🧪 **Fully Modular**: Clean separation of EDA, modeling, explainability, and dashboarding notebooks
 
@@ -176,7 +171,7 @@ These dashboards support public health researchers and policymakers in identifyi
 ### 🧠 Highlights & Conclusion
 ✅ Human-centered risk scoring from publicly available data
 ✅ Modular notebook structure and clear code flow
-✅ Strong emphasis on interpretability and health empathy
+✅ Strong emphasis on interpretability, calibration, and responsible use of SDOH-based predictions
 ✅ Scalable for use in mobile health apps or public policy systems
 
-This project demonstrates how responsible ML can support both individual well-being and large-scale health strategy.
+This project demonstrates a calibrated, interpretable SDOH-based health risk scoring framework that prioritizes ranking efficiency and probabilistic reliability over raw accuracy, suitable for population-level preventive health analysis.
