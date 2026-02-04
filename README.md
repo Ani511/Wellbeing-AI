@@ -19,7 +19,7 @@ This project aims to build an AI-powered tool that uses publicly available healt
 ## 🔬 Research Intention 
 
 
-Many health risk models emphasize discrimination metrics (e.g., accuracy or AUC) without sufficient attention to probabilistic calibration and ranking efficiency, which are critical in preventive and population-level decision-making
+Many health risk models emphasize discrimination metrics (e.g., accuracy or AUC) without sufficient attention to probabilistic calibration and ranking efficiency, which are critical in preventive and population-level decision-making. This project intentionally prioritizes calibration-aware evaluation and risk stratification quality, ensuring that predicted scores meaningfully reflect real-world outcome frequencies and can be reliably used for targeted intervention rather than binary diagnosis.
 
 --- 
 ## 🚀 Key Research Contributions
