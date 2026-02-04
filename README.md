@@ -16,11 +16,12 @@ This project aims to build an AI-powered tool that uses publicly available healt
 - Support **population-level policy decisions** through BI dashboards
 
 ---
-## 🔬 Research Intention
+## 🔬 Research Intention 
+
 
 Many health risk models emphasize discrimination metrics (e.g., accuracy or AUC) without sufficient attention to probabilistic calibration and ranking efficiency, which are critical in preventive and population-level decision-making
----
 
+--- 
 ## 🚀 Key Research Contributions
 
 ### 1. Model Calibration & Uncertainty Estimation
